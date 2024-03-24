@@ -1,3 +1,7 @@
+/*
+Krasso, R., (2021). CIS 505 Intermediate Java Programming. Bellevue University, all
+rights reserved.
+*/
 package com.bookclub;
 
 import org.springframework.boot.SpringApplication;
