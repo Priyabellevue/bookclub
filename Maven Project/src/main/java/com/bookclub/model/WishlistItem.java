@@ -1,4 +1,10 @@
+/*
+Krasso, R., (2021). CIS 505 Intermediate Java Programming. Bellevue University, all
+rights reserved.
+*/
 package com.bookclub.model;
+
+import org.springframework.data.annotation.Id;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +19,9 @@ public class WishlistItem {
     @NotEmpty(message = "Title is a required field.")
     private String title;
 
+    @Id
+    private String id;
+    
     public WishlistItem() {
     }
 
@@ -37,8 +46,16 @@ public class WishlistItem {
         return title;
     }
 
+    public void setId(String newId){
+        this.id = newId;
+    }
+
+    public String getId(){
+        return id;
+    }
+
     @Override
     public String toString() {
-        return String.format("WishlistItem{isbn=%s, title=%s}", isbn, title);
+        return String.format("WishlistItem{id=%s, isbn=%s, title=%s}", id, isbn, title);
     }
 }

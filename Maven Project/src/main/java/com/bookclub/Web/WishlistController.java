@@ -1,7 +1,12 @@
+/*
+Krasso, R., (2021). CIS 505 Intermediate Java Programming. Bellevue University, all
+rights reserved.
+*/
 package com.bookclub.Web;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bookclub.model.WishlistItem;
-import com.bookclub.service.impl.MemWishlistDao;
+import com.bookclub.service.dao.MongoWishlistDao;
+import com.bookclub.service.dao.WishlistDao;
 
 import jakarta.validation.Valid;
 
@@ -17,10 +23,16 @@ import jakarta.validation.Valid;
 @RequestMapping("/wishlist")
 public class WishlistController {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String showWishlist(Model model) {
-        MemWishlistDao wishlistDao = new MemWishlistDao();
+        WishlistDao wishlistDao = new MongoWishlistDao();
 
+        @Autowired
+        private void setWishlistDao(WishlistDao wishlistDao){
+        this.wishlistDao = wishlistDao;
+        }
+
+        @RequestMapping(method = RequestMethod.GET)
+        public String showWishlist(Model model) {
+        
         List<WishlistItem> wishlist = wishlistDao.list();
 
         model.addAttribute("wishlist", wishlist);
@@ -44,6 +56,7 @@ public class WishlistController {
             return "wishlist/new";
         }
 
+        wishlistDao.add(wishlistItem); // add the record to MongoDB
         return "redirect:/wishlist";
     }
 }
