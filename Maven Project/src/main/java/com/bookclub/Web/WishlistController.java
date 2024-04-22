@@ -6,6 +6,10 @@ package com.bookclub.Web;
 
 import java.util.List;
 
+/* import jakarta.validation.Valid; */
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.bookclub.model.WishlistItem;
 import com.bookclub.service.dao.MongoWishlistDao;
 import com.bookclub.service.dao.WishlistDao;
-
-import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/wishlist")
