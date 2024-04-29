@@ -4,8 +4,6 @@ rights reserved.
 */
 package com.bookclub.Web;
 
-import java.util.List;
-
 /* import jakarta.validation.Valid; */
 
 import javax.validation.Valid;
@@ -34,11 +32,6 @@ public class WishlistController {
 
         @RequestMapping(method = RequestMethod.GET)
         public String showWishlist(Model model) {
-        
-        List<WishlistItem> wishlist = wishlistDao.list();
-
-        model.addAttribute("wishlist", wishlist);
-
         return "wishlist/list";
     }
 
