@@ -11,9 +11,9 @@ public interface GenericCrudDao<E, K> {
 
     void update(E entity);
 
-    boolean remove(E entity);
+    boolean remove(K key);
 
-    List<E> list(); // Return a list of objects of type E.
+    List<E> list(K key); // Return a list of objects of type E by username.
 
     E find(K key); // Return an object of type E by type K value.
 }

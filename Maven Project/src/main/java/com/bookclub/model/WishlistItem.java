@@ -27,6 +27,8 @@ public class WishlistItem {
 
     @Id
     private String id;
+
+    private String username;
     
     public WishlistItem() {
     }
@@ -34,6 +36,12 @@ public class WishlistItem {
     public WishlistItem(String isbn, String title) {
         this.isbn = isbn;
         this.title = title;
+    }
+
+    public WishlistItem(String isbn, String title, String username){
+        setIsbn(isbn);
+        setTitle(title);
+        setUsername(username);
     }
 
     public void setIsbn(String isbn) {
@@ -60,8 +68,16 @@ public class WishlistItem {
         return id;
     }
 
+    public void setUsername(String newUsername){
+        this.username = newUsername;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
     @Override
     public String toString() {
-        return String.format("WishlistItem{id=%s, isbn=%s, title=%s}", id, isbn, title);
+        return String.format("WishlistItem{id=%s, isbn=%s, title=%s, username=%s}", id, isbn, title, username);
     }
 }
