@@ -4,8 +4,11 @@ rights reserved.
 */
 package com.bookclub.Web;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,32 +16,61 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bookclub.model.Book;
+import com.bookclub.model.BookOfTheMonth;
+import com.bookclub.service.dao.BookOfTheMonthDao;
+import com.bookclub.service.impl.MongoBookOfTheMonthDao;
 import com.bookclub.service.impl.RestBookDao;
 
 @Controller
 @RequestMapping("/")
-public class HomeController
-{
-	@RequestMapping(method = RequestMethod.GET)
-	public String showHome(Model model)
-	{
-		// Createing a new instance of the MemBookDao class
-        RestBookDao bookDao = new RestBookDao();
-        List<Book> books = bookDao.list();
+public class HomeController{
 
-        for (Book book : books) {
-            System.out.println(book.toString());
+    BookOfTheMonthDao bookOfTheMonthDao = new MongoBookOfTheMonthDao();
+
+    @Autowired
+    public void setBookOfTheMonthDao(BookOfTheMonthDao bookOfTheMonthDao){
+        this.bookOfTheMonthDao = bookOfTheMonthDao;
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String showHome(Model model){
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int calMonth = calendar.get(Calendar.MONTH) + 1;
+
+        RestBookDao bookDao = new RestBookDao();
+        List<BookOfTheMonth> monthlyBooks = bookOfTheMonthDao.list(Integer.toString(calMonth));
+
+        StringBuilder isbnBuilder = new StringBuilder();
+        isbnBuilder.append("ISBN:");
+
+        for (BookOfTheMonth monthlyBook : monthlyBooks) {
+            isbnBuilder.append(monthlyBook.getIsbn()).append(",");
         }
 
+        String isbnString = isbnBuilder.toString().substring(0, isbnBuilder.toString().length()-1);
+
+        List<Book> books = bookDao.list(isbnString);
+
         model.addAttribute("books", books);
+        return "index";
+    }
 
-		return "index";
-	}
+    @RequestMapping(method = RequestMethod.GET, path = "/about")
+    public String showAboutUs(Model model)
+    {
+        return "about";
+    }
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
-	
-	// Creating a new instance of the MemBookDao and call the find() method
-    public String getMonthlyBook(@PathVariable("id") String id, Model model) {
+    @RequestMapping(method = RequestMethod.GET, path = "/contact")
+    public String showContactUs(Model model)
+    {
+        return "contact";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public String getMonthlyBook(@PathVariable("id") String id, Model model){
         String isbn = id;
         System.out.println(id);
 
@@ -50,15 +82,4 @@ public class HomeController
         model.addAttribute("book", book);
         return "monthly-books/view";
     }
-
-	@RequestMapping(method = RequestMethod.GET, path= "/about")
-	public String showAboutUs(Model model)
-	{
-		return "about";
-	}
-	@RequestMapping(method = RequestMethod.GET, path= "/contact")
-	public String showContactUs(Model model)
-	{
-		return "contact";
-	}
 }
